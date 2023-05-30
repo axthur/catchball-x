@@ -1,0 +1,17 @@
+canvas {
+    width: 600px;
+    height: 600px;
+    background: url('./assets/background.png');
+    padding: 0;
+    margin: auto;
+    display: block;
+}
+
+h1 {
+    text-align: center;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
