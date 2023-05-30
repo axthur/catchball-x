@@ -49,7 +49,7 @@ function checkCollision(start, x, y, d, player) {
                 player2points.innerText = value;
             }
 
-            var sfx = document.getElementById("sfxPoint");
+            var sfx = document.getElementById('sfxPoint');
             sfx.play();
 
             generateFruit();
