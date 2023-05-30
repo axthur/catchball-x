@@ -195,15 +195,12 @@ document.addEventListener('keyup', handleKeyUp);
 // Função de animação
 let start = true;
 function animate() {
-    console.log('Player 1: ', player1x, player1y)
-    console.log('Player 2: ', player2x, player2y)
     updatePosition();
     updateCanvas();
 
     checkCollision(start, player1x, player1y, player1d, 1);
     start = false;
     checkCollision(start, player2x, player2y, player2d, 2);
-
 
     requestAnimationFrame(animate);
 }
