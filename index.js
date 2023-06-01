@@ -114,62 +114,62 @@ function updateCanvas() {
 
 // Função para lidar com os eventos de teclado
 function handleKeyDown(event) {
-    // Player 1
+    // Player 0
     // Move para a esquerda
-    if (event.keyCode === 37) {
+    if (event.keyCode === 65) {
         players[0].dx = -4;
     }
     // Move para cima
-    else if (event.keyCode === 38) {
+    else if (event.keyCode === 87) {
         players[0].dy = -4;
     }
     // Move para a direita
-    else if (event.keyCode === 39) {
+    else if (event.keyCode === 68) {
         players[0].dx = 4;
     }
     // Move para baixo
-    else if (event.keyCode === 40) {
+    else if (event.keyCode === 83) {
         players[0].dy = 4;
     }
 
-    // Player 2
+    // Player 1
     // Move para a esquerda
-    if (event.keyCode === 65) {
+    if (event.keyCode === 37) {
         players[1].dx = -4;
     }
     // Move para cima
-    else if (event.keyCode === 87) {
+    else if (event.keyCode === 38) {
         players[1].dy = -4;
     }
     // Move para a direita
-    else if (event.keyCode === 68) {
+    else if (event.keyCode === 39) {
         players[1].dx = 4;
     }
     // Move para baixo
-    else if (event.keyCode === 83) {
+    else if (event.keyCode === 40) {
         players[1].dy = 4;
     }
 }
 
 // Função para lidar com a liberação das teclas
 function handleKeyUp(event) {
-    // Player 1
+    // Player 0
     // Para a movimentação na direção horizontal
-    if (event.keyCode === 37 || event.keyCode === 39) {
+    if (event.keyCode === 65 || event.keyCode === 68) {
         players[0].dx = 0;
     }
     // Para a movimentação na direção vertical
-    else if (event.keyCode === 38 || event.keyCode === 40) {
+    else if (event.keyCode === 87 || event.keyCode === 83) {
         players[0].dy = 0;
     }
 
-    // Player 2
+    // Player 1
     // Para a movimentação na direção horizontal
-    if (event.keyCode === 65 || event.keyCode === 68) {
+    if (event.keyCode === 37 || event.keyCode === 39) {
         players[1].dx = 0;
     }
     // Para a movimentação na direção vertical
-    else if (event.keyCode === 87 || event.keyCode === 83) {
+    else if (event.keyCode === 38 || event.keyCode === 40) {
         players[1].dy = 0;
     }
 }
