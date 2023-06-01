@@ -1,101 +1,88 @@
 // Obtém uma referência para o elemento canvas
 const canvas = document.getElementById('myCanvas');
 const context = canvas.getContext('2d');
+const sfx = document.getElementById('sfxPoint');
+const points = [
+    document.getElementById('player0points'),
+    document.getElementById('player1points')
+];
 
-const player1points = document.getElementById('player1points')
-const player2points = document.getElementById('player2points')
 
-// Define as coordenadas iniciais da bola
-let player1x = canvas.width / 2;
-let player1y = canvas.height / 2;
+// Cria uma classe bola
+class Ball {
+    constructor(color, x, y, d, dx, dy) {
+        this.color = color;
+        this.x = x;
+        this.y = y;
+        this.d = d;
+        this.dx = dx;
+        this.dy = dy;
+    }
+}
 
-let player2x = canvas.width / 2;
-let player2y = canvas.height / 2;
 const ballRadius = 30;
 
-// Define as variáveis para o movimento da bola
-let player1dx = 0;
-let player1dy = 0;
+// Define as coordenadas iniciais
+let initialWidth = canvas.width / 2;
+let initialHeight = canvas.height / 2;
 
-let player2dx = 0;
-let player2dy = 0;
+// Define os jogadores
+let players = [
+    new Ball('red', initialWidth, initialHeight, -1, 0, 0),
+    new Ball('blue', initialWidth, initialHeight, -1, 0, 0)
+];
 
 // Função para desenhar a bola no canvas
-function drawBall(color, x, y) {
+function drawBall(player) {
     context.beginPath();
-    context.fillStyle = color;
-    context.arc(x, y, ballRadius, 0, Math.PI * 2);
+    context.fillStyle = player.color;
+    context.arc(player.x, player.y, ballRadius, 0, Math.PI * 2);
     context.fill();
     context.closePath();
 }
 
 // Função para verificar a colisão entre as bolas
-let player1d = -1;
-let player2d = -1;
+function checkCollision(start, player, i) {
+    d = Math.sqrt(Math.pow(Math.abs((fruitX - player.x)), 2) + Math.pow(Math.abs((fruitY - player.y)), 2), 2);
 
-function checkCollision(start, x, y, d, player) {
-    d = Math.sqrt(Math.pow(Math.abs((fruitX - x)), 2) + Math.pow(Math.abs((fruitY - y)), 2), 2);
     if (start) {
         generateFruit();
     } else {
         if (d <= ballRadius) {
-            if (player === 1) {
-                var value = player1points.innerText;
-                value++;
-                player1points.innerText = value;
-            } else if (player === 2) {
-                var value = player2points.innerText;
-                value++;
-                player2points.innerText = value;
-            }
+            var value = points[i].innerText;
+            value++;
+            points[i].innerText = value;
 
-            var sfx = document.getElementById('sfxPoint');
             sfx.play();
-
             generateFruit();
-            console.log("GOL!");
         }
     }
 }
 
 // Função para atualizar a posição da bola
 function updatePosition() {
-    player1x += player1dx;
-    player1y += player1dy;
+    players.forEach(
+        player => {
+            player.x += player.dx;
+            player.y += player.dy;
 
-    player2x += player2dx;
-    player2y += player2dy;
+            if (player.x >= canvas.width + ballRadius) {
+                player.x = 0;
+            } else if (player.x < -ballRadius) {
+                player.x = canvas.width;
+            }
 
-    // Player 1
-    if (player1x >= canvas.width + ballRadius) {
-        player1x = 0;
-    } else if (player1x < -ballRadius) {
-        player1x = canvas.width;
-    }
-
-    if (player1y > canvas.height + ballRadius) {
-        player1y = 0;
-    } else if (player1y < -ballRadius) {
-        player1y = canvas.height;
-    }
-
-    // Player 2
-    if (player2x >= canvas.width + ballRadius) {
-        player2x = 0;
-    } else if (player2x < -ballRadius) {
-        player2x = canvas.width;
-    }
-
-    if (player2y > canvas.height + ballRadius) {
-        player2y = 0;
-    } else if (player2y < -ballRadius) {
-        player2y = canvas.height;
-    }
+            if (player.y > canvas.height + ballRadius) {
+                player.y = 0;
+            } else if (player.y < -ballRadius) {
+                player.y = canvas.height;
+            }
+        }
+    )
 }
 
 // Desenha uma fruta
-var fruitX;
-var fruitY;
+var fruitX, fruitY;
 
 function generateFruit() {
     context.beginPath();
@@ -122,8 +109,7 @@ function updateCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     keepFruit();
-    drawBall('blue', player1x, player1y);
-    drawBall('red', player2x, player2y);
+    players.forEach(player => { drawBall(player); })
 }
 
 // Função para lidar com os eventos de teclado
@@ -131,37 +117,37 @@ function handleKeyDown(event) {
     // Player 1
     // Move para a esquerda
     if (event.keyCode === 37) {
-        player1dx = -4;
+        players[0].dx = -4;
     }
     // Move para cima
     else if (event.keyCode === 38) {
-        player1dy = -4;
+        players[0].dy = -4;
     }
     // Move para a direita
     else if (event.keyCode === 39) {
-        player1dx = 4;
+        players[0].dx = 4;
     }
     // Move para baixo
     else if (event.keyCode === 40) {
-        player1dy = 4;
+        players[0].dy = 4;
     }
 
     // Player 2
     // Move para a esquerda
     if (event.keyCode === 65) {
-        player2dx = -4;
+        players[1].dx = -4;
     }
     // Move para cima
     else if (event.keyCode === 87) {
-        player2dy = -4;
+        players[1].dy = -4;
     }
     // Move para a direita
     else if (event.keyCode === 68) {
-        player2dx = 4;
+        players[1].dx = 4;
     }
     // Move para baixo
     else if (event.keyCode === 83) {
-        player2dy = 4;
+        players[1].dy = 4;
     }
 }
 
@@ -170,21 +156,21 @@ function handleKeyUp(event) {
     // Player 1
     // Para a movimentação na direção horizontal
     if (event.keyCode === 37 || event.keyCode === 39) {
-        player1dx = 0;
+        players[0].dx = 0;
     }
     // Para a movimentação na direção vertical
     else if (event.keyCode === 38 || event.keyCode === 40) {
-        player1dy = 0;
+        players[0].dy = 0;
     }
 
     // Player 2
     // Para a movimentação na direção horizontal
     if (event.keyCode === 65 || event.keyCode === 68) {
-        player2dx = 0;
+        players[1].dx = 0;
     }
     // Para a movimentação na direção vertical
     else if (event.keyCode === 87 || event.keyCode === 83) {
-        player2dy = 0;
+        players[1].dy = 0;
     }
 }
 
@@ -198,9 +184,9 @@ function animate() {
     updatePosition();
     updateCanvas();
 
-    checkCollision(start, player1x, player1y, player1d, 1);
+    checkCollision(start, players[0], 0);
     start = false;
-    checkCollision(start, player2x, player2y, player2d, 2);
+    checkCollision(start, players[1], 1);
 
     requestAnimationFrame(animate);
 }
