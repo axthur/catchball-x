@@ -42,21 +42,22 @@ function drawBall(player) {
 }
 
 // Função para verificar a colisão entre as bolas
-function checkCollision(start, player, i) {
-    d = Math.sqrt(Math.pow(Math.abs((fruitX - player.x)), 2) + Math.pow(Math.abs((fruitY - player.y)), 2), 2);
+function checkCollision() {
+    players.forEach(
+        player => {
+            let deltaX = player.x - fruit.x;
+            let deltaY = player.y - fruit.y;
+            let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-    if (start) {
-        generateFruit();
-    } else {
-        if (d <= ballRadius) {
-            var value = points[i].innerText;
-            value++;
-            points[i].innerText = value;
-
-            sfx.play();
-            generateFruit();
+            if (distance <= ballRadius) {
+                var point = points[players.indexOf(player)];
+                var value = point.innerText;
+                value++;
+                point.innerText = value;
+                generateFruit();
+            }
         }
-    }
+    );
 }
 
 // Função para atualizar a posição da bola
@@ -82,15 +83,21 @@ function updatePosition() {
 }
 
 // Desenha uma fruta
-var fruitX, fruitY;
+class Fruit {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+let fruit = new Fruit(Math.floor(Math.random() * 600), Math.floor(Math.random() * 600));
 
 function generateFruit() {
     context.beginPath();
 
-    fruitX = Math.floor(Math.random() * 600);
-    fruitY = Math.floor(Math.random() * 600);
+    fruit.x = Math.floor(Math.random() * 600);
+    fruit.y = Math.floor(Math.random() * 600);
 
-    context.arc(fruitX, fruitY, ballRadius / 3, 0, Math.PI * 2);
+    context.arc(fruit.x, fruit.y, ballRadius / 3, 0, Math.PI * 2);
     context.fillStyle = 'white';
     context.fill();
     context.closePath();
@@ -98,7 +105,7 @@ function generateFruit() {
 
 function keepFruit() {
     context.beginPath();
-    context.arc(fruitX, fruitY, ballRadius / 3, 0, Math.PI * 2);
+    context.arc(fruit.x, fruit.y, ballRadius / 3, 0, Math.PI * 2);
     context.fillStyle = 'white';
     context.fill();
     context.closePath();
@@ -184,9 +191,9 @@ function animate() {
     updatePosition();
     updateCanvas();
 
-    checkCollision(start, players[0], 0);
+    if (start) generateFruit();
     start = false;
-    checkCollision(start, players[1], 1);
+    checkCollision();
 
     requestAnimationFrame(animate);
 }
