@@ -54,6 +54,7 @@ function checkCollision() {
                 var value = point.innerText;
                 value++;
                 point.innerText = value;
+                sfx.play();
                 generateFruit();
             }
         }
